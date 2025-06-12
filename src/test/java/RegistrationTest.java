@@ -2,48 +2,42 @@ import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
-import ru.praktikum.LoginPage;
-import ru.praktikum.MainPage;
-import ru.praktikum.RegistrationPage;
+import ru.BaseTest;
+import ru.praktikum.*;
 import ru.praktikum.utils.UserGenerator;
-import ru.praktikum.utils.WebDriverFactory;
 
+import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(Parameterized.class)
-public class RegistrationTest {
-    private WebDriver driver;
+public class RegistrationTest extends BaseTest {
     private MainPage mainPage;
     private RegistrationPage registrationPage;
     private LoginPage loginPage;
-    private final String browser;
-
-    public RegistrationTest(String browser) {
-        this.browser = browser;
-    }
-
-    @Parameterized.Parameters(name = "Browser: {0}")
-    public static Object[][] getBrowser() {
-        return new Object[][] {
-                {"chrome"},
-                {"yandex"}
-        };
-    }
+    private String accessToken;
 
     @Before
+    @Override
     public void setUp() {
-        driver = WebDriverFactory.getDriver(browser);
+        super.setUp();
         mainPage = new MainPage(driver);
         registrationPage = new RegistrationPage(driver);
         loginPage = new LoginPage(driver);
 
-        driver.get("https://stellarburgers.nomoreparties.site/");
         mainPage.clickLoginButton();
         loginPage.clickRegisterLink();
+    }
+
+    @After
+    @Override
+    public void tearDown() {
+        // Удаление пользователя через API, если он был создан
+        if (accessToken != null) {
+            given()
+                    .header("Authorization", accessToken)
+                    .delete(Constants.API_USER_URL);
+        }
+        super.tearDown();
     }
 
     @Test
@@ -68,10 +62,5 @@ public class RegistrationTest {
         registrationPage.register(name, email, password);
         assertEquals("Некорректное сообщение об ошибке",
                 "Некорректный пароль", registrationPage.getPasswordError());
-    }
-
-    @After
-    public void tearDown() {
-        driver.quit();
     }
 }

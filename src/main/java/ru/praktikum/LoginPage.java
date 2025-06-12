@@ -1,5 +1,6 @@
 package ru.praktikum;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -23,36 +24,44 @@ public class LoginPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
+    @Step("Ввод email: {email}")
     public void setEmail(String email) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput)).sendKeys(email);
     }
 
+    @Step("Ввод пароля")
     public void setPassword(String password) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(passwordInput)).sendKeys(password);
     }
 
+    @Step("Клик по кнопке 'Войти'")
     public void clickLoginButton() {
         wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
     }
 
+    @Step("Клик по ссылке 'Зарегистрироваться'")
     public void clickRegisterLink() {
         wait.until(ExpectedConditions.elementToBeClickable(registerLink)).click();
     }
 
+    @Step("Клик по ссылке 'Восстановить пароль'")
     public void clickRecoverPasswordLink() {
         wait.until(ExpectedConditions.elementToBeClickable(recoverPasswordLink)).click();
     }
 
+    @Step("Получение текста ошибки")
     public String getErrorMessage() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
     }
 
+    @Step("Авторизация с email: {email}")
     public void login(String email, String password) {
         setEmail(email);
         setPassword(password);
         clickLoginButton();
     }
 
+    @Step("Проверка отображения кнопки 'Войти'")
     public boolean isLoginButtonDisplayed() {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(loginButton));

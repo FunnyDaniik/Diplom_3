@@ -1,5 +1,6 @@
 package ru.praktikum;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -8,7 +9,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class MainPage {
     private WebDriver driver;
 
-    // Локаторы элементов
     private By loginButton = By.xpath("//button[text()='Войти в аккаунт']");
     private By personalAccountButton = By.xpath("//p[text()='Личный Кабинет']");
     private By bunsSection = By.xpath("//span[text()='Булки']/..");
@@ -21,37 +21,37 @@ public class MainPage {
         this.driver = driver;
     }
 
-    // Клик по кнопке "Войти в аккаунт"
+    @Step("Клик по кнопке 'Войти в аккаунт'")
     public void clickLoginButton() {
         driver.findElement(loginButton).click();
     }
 
-    // Клик по кнопке "Личный кабинет"
+    @Step("Клик по кнопке 'Личный кабинет'")
     public void clickPersonalAccountButton() {
         driver.findElement(personalAccountButton).click();
     }
 
-    // Клик по разделу "Булки"
+    @Step("Клик по разделу 'Булки'")
     public void clickBunsSection() {
         driver.findElement(bunsSection).click();
     }
 
-    // Клик по разделу "Соусы"
+    @Step("Клик по разделу 'Соусы'")
     public void clickSaucesSection() {
         driver.findElement(saucesSection).click();
     }
 
-    // Клик по разделу "Начинки"
+    @Step("Клик по разделу 'Начинки'")
     public void clickFillingsSection() {
         driver.findElement(fillingsSection).click();
     }
 
-    // Получение текста активного раздела
+    @Step("Получение текста активного раздела")
     public String getSelectedSectionText() {
         return driver.findElement(selectedSection).getText();
     }
 
-    // Проверка видимости кнопки "Оформить заказ"
+    @Step("Проверка отображения кнопки 'Оформить заказ'")
     public boolean isOrderButtonDisplayed(WebDriverWait wait) {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(orderButton));
